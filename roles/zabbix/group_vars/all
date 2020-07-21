@@ -1,0 +1,8 @@
+---
+zabbix_server: 172.16.1.71
+#zabbix_proxy: 
+#zabbix_agent: 172.16.1.7
+#zabbix_agent: 172.16.1.8
+ansible_ssh_user: root
+ansible_ssh_pass: '1'
+ansible_ssh_port: 22
