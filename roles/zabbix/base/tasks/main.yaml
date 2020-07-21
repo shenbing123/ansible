@@ -1,0 +1,23 @@
+---
+    - name: set hostname
+      hostname: name={{ hostname }}
+
+    - name: Stop firewalld
+      service: name=firewalld state=stopped enabled=no
+
+    - name: Stop selinux
+      shell: /usr/sbin/getenforce 0 && sed -i '/^SELINUX=/c SELINUX=disabled' /etc/sysconfig/selinux
+
+    - name: Copy epel yum source
+      copy: src={{ item.src }} dest={{ item.dest }} owner=root group=root mode=644
+      with_items:
+         - { src: CentOS-Base.repo, dest: /etc/yum.repos.d/CentOS-Base.repo }
+         - { src: RPM-GPG-KEY-CentOS-7, dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7 } 
+         - { src: epel.repo, dest: /etc/yum.repos.d/epel.repo }
+         - { src: RPM-GPG-KEY-EPEL-7, dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7 }
+         - { src: zabbix.repo, dest: /etc/yum.repos.d/zabbix.repo }
+         - { src: RPM-GPG-KEY-ZABBIX, dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-ZABBIX }
+         - { src: RPM-GPG-KEY-ZABBIX-A14FE591, dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-ZABBIX-A14FE591 }
+    
+    - name: Copy /etc/hosts files
+      template: src=hosts.j2 dest=/etc/hosts owner=root group=root mode=644

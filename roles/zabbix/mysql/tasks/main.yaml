@@ -1,0 +1,27 @@
+--- 
+    - name: Install mariadb-server
+      yum: name={{ item }} state=present
+      loop:
+        - mariadb-server
+        - MySQL-python   #不安装此模块，ansible无法使用mysql_db模块
+
+    - name: Start mariadb-server
+      service: name=mariadb state=started enabled=yes
+
+    - name: Set mariadb admin password
+      shell: /usr/bin/mysqladmin -u root password {{ db_root_pw }}
+
+    - name: Create zabbix databases
+      #shell: /usr/bin/mysql -u root -p123 -e 'create database zabbix character set utf8 collate utf8_bin;'
+      mysql_db:
+        login_host: "localhost"
+        login_user: "root"
+        login_password: "{{ db_root_pw }}"
+        login_port: "3306"
+        name: "{{ DBName }}"
+        encoding: "utf8"
+        collation: "utf8_bin"
+        state: "present"
+
+    - name: Set zabbix databases grant
+      shell: /usr/bin/mysql -u root -p123 -e 'grant all privileges on {{ DBName }}.* to {{ DBUser }}@{{ DBHost }} identified by "{{ DBPassword }}";'
