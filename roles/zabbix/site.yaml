@@ -1,8 +1,0 @@
---- 
-    - hosts: all
-      gather_facts: false
-      roles:
-         - { role: zabbix/base, tags: base }
-         - { role: zabbix/mysql, when: "'zabbix_server' in group_names", tags: mairadb }
-         - { role: zabbix/zabbix-server, when: "'zabbix_server' in group_names",  tags: server }
-         - { role: zabbix/zabbix-agent, when: "'zabbix_agent' in group_names",  tags: agent }

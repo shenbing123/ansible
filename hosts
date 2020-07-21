@@ -1,9 +1,0 @@
-[zabbix_server]
-172.16.1.71 hostname=server
-
-[zabbix_agent]
-172.16.1.7 hostname=agent01
-172.16.1.8 hostname=agent02
- 
-[zabbix_agent:children]
-zabbix_server
